@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  php-apache-environment:
+    build: ./app
+    container_name: php-apache
+    image: php:8.0-apache
+    volumes:
+      - ./app:/var/www/html/
+    ports:
+      - 8000:80
+
+  db:
+    container_name: php_test-db
+    image: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: php_test
+      MYSQL_DATABASE: php_test
+      MYSQL_USER: php_test
+      MYSQL_PASSWORD: php_test
+    ports:
+      - "9906:3306"
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    ports:
+      - '8080:80'
+    restart: always
+    environment:
+      PMA_HOST: db
+    depends_on:
+      - db
